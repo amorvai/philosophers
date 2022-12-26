@@ -6,18 +6,21 @@
 /*   By: amorvai <amorvai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 18:04:31 by amorvai           #+#    #+#             */
-/*   Updated: 2022/12/25 22:57:03 by amorvai          ###   ########.fr       */
+/*   Updated: 2022/12/26 23:28:08 by amorvai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	is_anyone_hungry(t_law *law);
-int	loop(t_law *law);
+int		is_anyone_hungry(t_law *law);
+int		loop(t_law *law);
+void	*boss(void *law2);
+int		boss_loop(t_law *law);
 
 int	main(int argc, char **argv)
 {
 	t_law			law;
+	pthread_t		boss_thread;
 
 	if (argc < 5 || argc > 6 || get_law(argc, argv, &law) || init_philos(&law))
 		return (1);
@@ -25,6 +28,7 @@ int	main(int argc, char **argv)
 	printf("seconds : %ld\nmicro seconds : %i\n\n", \
 			law.begin.tv_sec, law.begin.tv_usec);
 	// printf("timestamp : %i\n", gettimestamp(law.begin));
+	pthread_create(&boss_thread, NULL, boss, &law);
 	if (is_anyone_hungry(&law))
 	{
 		loop(&law);
@@ -47,21 +51,4 @@ int	loop(t_law *law)
 	return (0);
 }
 
-int	is_anyone_hungry(t_law *law)
-{
-	int	i;
-
-	i = 0;
-	if (law->meals == -1)
-		return (1);
-	if (law->meals == 0)
-		return (0);
-	while (i < law->nb_philos)
-	{
-		if (law->philos[i].meals_left > 0)
-			return (i + 1);
-		i++;
-	}
-	return (0);
-}
 

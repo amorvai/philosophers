@@ -6,7 +6,7 @@
 /*   By: amorvai <amorvai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 15:30:32 by amorvai           #+#    #+#             */
-/*   Updated: 2022/12/25 17:23:13 by amorvai          ###   ########.fr       */
+/*   Updated: 2022/12/26 22:08:17 by amorvai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,15 +63,25 @@ int	init_philos(t_law *law)
 		law->forks[i].position = i;
 		if (pthread_mutex_init(&law->forks[i].mutex, NULL))
 			return (free_everything(law, i), 1);
-		law->philos[i].l_fork = &law->forks[i];
+		law->philos[i].r_fork = &law->forks[i];
 		if (i >= 1)
-			law->philos[i - 1].r_fork = &law->forks[i];
+			law->philos[i - 1].l_fork = &law->forks[i];
 		i++;
 	}
-	law->philos[i].r_fork = &law->forks[0];
-	
+	law->philos[i - 1].l_fork = &law->forks[0];
+	// printf("philo %i, r_fork: %i\n", law->philos[i].position, law->philos[i].r_fork->position);
 	return (0);
 }
+// void	print_philo(t_law *law)
+// {
+	// int i;
+	// i = 0;
+	// while (i < law->nb_philos)
+	// {
+	// 	printf("philo nb %i: r_fork: %i, l_fork: %i\n", law->philos[i].position, law->philos[i].r_fork->position, law->philos[i].l_fork->position);
+	// 	i++;
+	// }
+// }
 
 void	free_everything(t_law *law, int i)
 {

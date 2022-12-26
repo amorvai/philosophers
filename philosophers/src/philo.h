@@ -6,7 +6,7 @@
 /*   By: amorvai <amorvai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 19:07:18 by amorvai           #+#    #+#             */
-/*   Updated: 2022/12/25 22:50:09 by amorvai          ###   ########.fr       */
+/*   Updated: 2022/12/26 22:52:17 by amorvai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ int		ft_atoi(const char *str, int *result);
 int		get_law(int argc, char **argv, t_law *law);
 int		init_philos(t_law *law);
 int		gettimestamp(struct timeval	starting_time);
+void	print_timestamp(struct timeval starting_time, int position, enum state state);
+int		gettimestamp_mod(struct timeval starting_time, struct timeval current_time);
 void	ft_usleep(int microsecs);
 void	*routine(void *random_philo);
 
