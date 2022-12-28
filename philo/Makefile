@@ -6,7 +6,7 @@
 #    By: amorvai <amorvai@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/25 14:35:11 by amorvai           #+#    #+#              #
-#    Updated: 2022/12/28 23:07:56 by amorvai          ###   ########.fr        #
+#    Updated: 2022/12/28 23:09:21 by amorvai          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,13 +28,13 @@ OBJ		:= $(addprefix $(OBJ_DIR), $(patsubst %.c, %.o, $(SRC)))
 all: $(NAME)
 
 $(NAME): $(OBJ_DIR) $(OBJ)
-	$(CC) $(OBJ) -o $(NAME)
+	$(CC) $(OBJ) -o $(NAME) -lpthread
 
 $(OBJ_DIR): 
 	mkdir obj
 
 $(OBJ_DIR)%.o: %.c 
-	$(CC) $(CFLAGS) $< -c -o $@ -lpthread
+	$(CC) $(CFLAGS) $< -c -o $@
 
 clean:
 	rm -f $(OBJ)

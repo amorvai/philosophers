@@ -6,7 +6,7 @@
 /*   By: amorvai <amorvai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 15:30:32 by amorvai           #+#    #+#             */
-/*   Updated: 2022/12/28 15:09:05 by amorvai          ###   ########.fr       */
+/*   Updated: 2022/12/28 23:09:42 by amorvai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,6 @@ static int	setup_philos2(t_law *law)
 
 int	setup_philos(t_law *law)
 {
-	int	i;
-
-	i = 0;
 	law->philos = ft_calloc(law->nb_philos, sizeof(t_philosopher));
 	if (!law->philos)
 		return (1);
