@@ -6,7 +6,7 @@
 /*   By: amorvai <amorvai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 18:04:31 by amorvai           #+#    #+#             */
-/*   Updated: 2022/12/28 23:05:58 by amorvai          ###   ########.fr       */
+/*   Updated: 2022/12/29 00:20:13 by amorvai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,11 @@ int	main(int argc, char **argv)
 		pthread_create(&boss_thread, NULL, boss, &law);
 		setoff_philos(&law);
 		pthread_join(boss_thread, NULL);
+		while (law.nb_philos)
+		{
+			pthread_join(law.philos[law.nb_philos - 1].thread, NULL);
+			law.nb_philos--;
+		}
 	}
 	return (free_setup(&law, law.nb_philos, 0), 0);
 }
