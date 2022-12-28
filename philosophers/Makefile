@@ -6,7 +6,7 @@
 #    By: amorvai <amorvai@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/25 14:35:11 by amorvai           #+#    #+#              #
-#    Updated: 2022/12/25 20:25:02 by amorvai          ###   ########.fr        #
+#    Updated: 2022/12/28 02:21:27 by amorvai          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,11 +17,11 @@ VPATH	:= src/
 OBJ_DIR	:= obj/
 
 SRC		:=	main.c \
-			ft_calloc.c \
-			ft_atoi.c \
+			philo.c \
 			set_up.c \
+			state.c \
+			boss.c \
 			util.c \
-			philo.c
 
 OBJ		:= $(addprefix $(OBJ_DIR), $(patsubst %.c, %.o, $(SRC)))
 

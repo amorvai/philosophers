@@ -6,104 +6,68 @@
 /*   By: amorvai <amorvai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/25 20:21:47 by amorvai           #+#    #+#             */
-/*   Updated: 2022/12/26 23:22:11 by amorvai          ###   ########.fr       */
+/*   Updated: 2022/12/28 02:30:33 by amorvai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void	try(t_philosopher *philo);
-void	eat(t_philosopher *philo);
-void	philo_sleep(t_philosopher *philo);
-void	think(t_philosopher *philo, int	milliseconds);
-int		will_i_die(t_philosopher *philo, int var);
-void	print_timestamp(struct timeval starting_time, int position, enum state state);
+static int	start_feeding_loop(t_philosopher *philo, int p);
 
 void *routine(void *random_philo)
 {
 	t_philosopher	*philo;
-	
-	philo = (t_philosopher *)random_philo;
-	try(philo);
-	return (NULL);
-}
-
-static void	try(t_philosopher *philo)
-{
 	int	p;
-	
+
+	philo = (t_philosopher *)random_philo;
 	if (philo->law->nb_philos % 2 == 0)
 		p = 0;
 	else
 		p = 1;
-	// printf("timestamp : %i\n", gettimestamp(philo->law->begin));
-	if (philo->position % 2 == 0)
+	if (philo->meals_left && philo->position % 2 == 0)
 	{
-		think(philo, philo->law->time_eat);
+		if (think(philo, philo->law->time_eat))
+			return (NULL);
 		if (p)
 			p++;
 	}
-	while (philo->meals_left)
+	start_feeding_loop(philo, p);
+	return (NULL);
+}
+
+static int	start_feeding_loop(t_philosopher *philo, int p)
+{
+	// printf("timestamp : %i\n", gettimestamp(philo->law->begin));
+	while (philo->meals_left || philo->law->meals == -1)
 	{
-		if (philo->position == p)
-			think(philo, philo->law->time_eat);
+		if (philo->position == p && think(philo, philo->law->time_eat))
+			return (printf("ISSUE : THINK\n"), 1);
 		eat(philo);
-		philo_sleep(philo);
-		if (philo->law->time_eat > philo->law->time_sleep)
-			think(philo, philo->law->time_eat - philo->law->time_sleep);
-		if (p && p % 2 == 1 && p >= philo->law->nb_philos)
+		if (philo_sleep(philo))
+			return (printf("ISSUE : SLEEP\n"), 1);
+		if (philo->law->time_eat > philo->law->time_sleep \
+			&& think(philo, philo->law->time_eat - philo->law->time_sleep))
+			return (printf("ISSUE : THINK\n"), 1);
+		if (p && p % 2 == 1 && p > philo->law->nb_philos)
 			p = 1;
-		else if (p && p % 2 == 0 && p >= philo->law->nb_philos)
+		else if (p && p % 2 == 0 && p > philo->law->nb_philos)
 			p = 2;
 		else if (p)
 			p += 2;
 		philo->meals_left--;
 	}
-}
-	
-	// while (philo->meals_left && p == 0)
-	// {
-	// 	eat(philo);
-	// 	philo_sleep(philo);
-	// 	philo->meals_left--;
-	// 	// printf("Hi, I am #%i, and I am alive. (Please let me die)\n", philo->position);
-	// }
-void	eat(t_philosopher *philo)
-{
-	pthread_mutex_lock(&philo->l_fork->mutex);
-	print_timestamp(philo->law->begin, philo->position, 4);
-	pthread_mutex_lock(&philo->r_fork->mutex);
-	print_timestamp(philo->law->begin, philo->position, 4);
-	print_timestamp(philo->law->begin, philo->position, 1);
-	gettimeofday(&philo->last_meal, NULL);
-	ft_usleep(philo->law->time_eat);
-	pthread_mutex_unlock(&philo->r_fork->mutex);
-	pthread_mutex_unlock(&philo->l_fork->mutex);
-}
-
-void	philo_sleep(t_philosopher *philo)
-{
-	will_i_die(philo, philo->law->time_sleep);
-	print_timestamp(philo->law->begin, philo->position, 3);
-	ft_usleep(philo->law->time_sleep);
-}
-
-void	think(t_philosopher *philo, int	milliseconds)
-{
-	will_i_die(philo, milliseconds);
-	print_timestamp(philo->law->begin, philo->position, 2);
-	ft_usleep(milliseconds);
-}
-
-int		will_i_die(t_philosopher *philo, int var)
-{
-	if (gettimestamp(philo->last_meal) + var > philo->law->time_die)
-	{
-		ft_usleep(philo->law->time_die - gettimestamp(philo->last_meal));
-		print_timestamp(philo->law->begin, philo->position, DEAD);
-		return (1);
-	}
 	return (0);
+}
+
+int	gettimestamp(struct timeval starting_time)
+{
+	struct timeval	current_time;
+
+	gettimeofday(&current_time, NULL);
+	// printf("seconds : %ld\nmicro seconds : %i\n\n", \
+	// 		current_time.tv_sec, current_time.tv_usec);
+	return (1000 * (current_time.tv_sec - starting_time.tv_sec) \
+			+ 0.001 * (current_time.tv_usec - starting_time.tv_usec));
 }
 
 void	print_timestamp(struct timeval starting_time, int position, enum state state)
