@@ -6,7 +6,7 @@
 #    By: amorvai <amorvai@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/25 14:35:11 by amorvai           #+#    #+#              #
-#    Updated: 2022/12/28 23:00:19 by amorvai          ###   ########.fr        #
+#    Updated: 2022/12/28 23:07:56 by amorvai          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ $(OBJ_DIR):
 	mkdir obj
 
 $(OBJ_DIR)%.o: %.c 
-	$(CC) $(CFLAGS) $< -c -o $@
+	$(CC) $(CFLAGS) $< -c -o $@ -lpthread
 
 clean:
 	rm -f $(OBJ)
