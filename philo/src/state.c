@@ -6,7 +6,7 @@
 /*   By: amorvai <amorvai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 23:34:39 by amorvai           #+#    #+#             */
-/*   Updated: 2022/12/28 23:47:55 by amorvai          ###   ########.fr       */
+/*   Updated: 2022/12/29 00:03:17 by amorvai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,33 +14,33 @@
 
 int	eat_odd(t_philosopher *philo)
 {
-	pthread_mutex_lock(&philo->l_fork->mutex);
-	print_timestamp(philo, philo->law->begin, philo->position, GRAB);
 	pthread_mutex_lock(&philo->r_fork->mutex);
+	print_timestamp(philo, philo->law->begin, philo->position, GRAB);
+	pthread_mutex_lock(&philo->l_fork->mutex);
 	print_timestamp(philo, philo->law->begin, philo->position, GRAB);
 	print_timestamp(philo, philo->law->begin, philo->position, EAT);
 	gettimeofday(&philo->last_meal, NULL);
 	if (will_i_die(philo, philo->law->time_eat))
 		return (1);
 	ft_usleep(philo->law->time_eat);
-	pthread_mutex_unlock(&philo->r_fork->mutex);
 	pthread_mutex_unlock(&philo->l_fork->mutex);
+	pthread_mutex_unlock(&philo->r_fork->mutex);
 	return (0);
 }
 
 int	eat_even(t_philosopher *philo)
 {
-	pthread_mutex_lock(&philo->r_fork->mutex);
-	print_timestamp(philo, philo->law->begin, philo->position, GRAB);
 	pthread_mutex_lock(&philo->l_fork->mutex);
+	print_timestamp(philo, philo->law->begin, philo->position, GRAB);
+	pthread_mutex_lock(&philo->r_fork->mutex);
 	print_timestamp(philo, philo->law->begin, philo->position, GRAB);
 	print_timestamp(philo, philo->law->begin, philo->position, EAT);
 	gettimeofday(&philo->last_meal, NULL);
 	if (will_i_die(philo, philo->law->time_eat))
 		return (1);
 	ft_usleep(philo->law->time_eat);
-	pthread_mutex_unlock(&philo->l_fork->mutex);
 	pthread_mutex_unlock(&philo->r_fork->mutex);
+	pthread_mutex_unlock(&philo->l_fork->mutex);
 	return (0);
 }
 
