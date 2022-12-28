@@ -6,13 +6,13 @@
 #    By: amorvai <amorvai@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/25 14:35:11 by amorvai           #+#    #+#              #
-#    Updated: 2022/12/28 02:21:27 by amorvai          ###   ########.fr        #
+#    Updated: 2022/12/28 23:00:19 by amorvai          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	:= philo
 CC		:= cc
-CFLAGS	:= -I src/ -I lib/ -Wall -Werror -Wextra
+CFLAGS	:= -I src/ -I lib/ -Wall -Wextra #-Werror
 VPATH	:= src/
 OBJ_DIR	:= obj/
 

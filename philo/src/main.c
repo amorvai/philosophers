@@ -6,7 +6,7 @@
 /*   By: amorvai <amorvai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 18:04:31 by amorvai           #+#    #+#             */
-/*   Updated: 2022/12/28 15:10:46 by amorvai          ###   ########.fr       */
+/*   Updated: 2022/12/28 23:05:58 by amorvai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,13 @@ int	main(int argc, char **argv)
 	if (argc < 5 || argc > 6 || get_law(argc, argv, &law) || setup_philos(&law))
 		return (1);
 	gettimeofday(&law.begin, NULL);
+	if (law.nb_philos == 1)
+	{
+		print_timestamp(&law.philos[0], law.begin, 1, GRAB);
+		ft_usleep(law.time_die);
+		print_timestamp(&law.philos[0], law.begin, 1, DEAD);
+		return (free_setup(&law, law.nb_philos, 0), 1);
+	}
 	set_last_meal_time(&law);
 	if (law.meals != 0)
 	{
@@ -27,8 +34,7 @@ int	main(int argc, char **argv)
 		setoff_philos(&law);
 		pthread_join(boss_thread, NULL);
 	}
-	free_setup(&law, law.nb_philos, 0);
-	return (0);
+	return (free_setup(&law, law.nb_philos, 0), 0);
 }
 
 	// printf("seconds : %ld\nmicro seconds : %i\n\n",
