@@ -6,11 +6,11 @@
 /*   By: amorvai <amorvai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/25 20:22:22 by amorvai           #+#    #+#             */
-/*   Updated: 2022/12/27 23:33:02 by amorvai          ###   ########.fr       */
+/*   Updated: 2022/12/28 15:08:40 by amorvai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../inc/philo.h"
 
 void	*ft_calloc(size_t count, size_t size)
 {
@@ -77,9 +77,23 @@ void	ft_usleep(int millisecs)
 		;
 }
 
+void	free_setup(t_law *law, int i, int y)
+{
+	int	j;
 
-// int	gettimestamp_mod(struct timeval starting_time, struct timeval current_time)
-// {
-// 	return (1000 * (current_time.tv_sec - starting_time.tv_sec) \
-// 			+ 0.001 * (current_time.tv_usec - starting_time.tv_usec));
-// }
+	j = 0;
+	pthread_mutex_destroy(&law->printf_mutex);
+	while (j < i)
+	{
+		pthread_mutex_destroy(&law->forks[j].mutex);
+		pthread_mutex_destroy(&law->philos[j].meals_mutex);
+		pthread_mutex_destroy(&law->philos[j].termination_mutex);
+		j++;
+	}
+	if (y >= 1)
+		pthread_mutex_destroy(&law->forks[j].mutex);
+	if (y == 2)
+		pthread_mutex_destroy(&law->philos[j].meals_mutex);
+	free(law->philos);
+	free(law->forks);
+}

@@ -6,14 +6,11 @@
 /*   By: amorvai <amorvai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 15:30:32 by amorvai           #+#    #+#             */
-/*   Updated: 2022/12/28 00:26:10 by amorvai          ###   ########.fr       */
+/*   Updated: 2022/12/28 15:09:05 by amorvai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
-
-	// printf("before\n");
-	// printf("after\n");
+#include "../inc/philo.h"
 
 int	get_law(int argc, char **argv, t_law *law)
 {
@@ -35,21 +32,30 @@ int	get_law(int argc, char **argv, t_law *law)
 	return (0);
 }
 
-void	free_failed_setup(t_law *law, int i, int y)
+static int	setup_philos2(t_law *law)
 {
-	int	j;
+	int	i;
 
-	j = 0;
-	while (j < i)
+	i = 0;
+	while (i < law->nb_philos)
 	{
-		pthread_mutex_destroy(&law->forks[j].mutex);
-		pthread_mutex_destroy(&law->philos[j].termination_mutex);
-		j++;
+		law->philos[i].law = law;
+		law->philos[i].position = i + 1;
+		law->philos[i].state = THINK;
+		law->philos[i].meals_left = law->meals;
+		if (pthread_mutex_init(&law->forks[i].mutex, NULL))
+			return (free_setup(law, i, 0), 1);
+		if (pthread_mutex_init(&law->philos[i].meals_mutex, NULL))
+			return (free_setup(law, i, 1), 1);
+		if (pthread_mutex_init(&law->philos[i].termination_mutex, NULL))
+			return (free_setup(law, i, 2), 1);
+		law->philos[i].r_fork = &law->forks[i];
+		if (i >= 1)
+			law->philos[i - 1].l_fork = &law->forks[i];
+		i++;
 	}
-	if (y == 1)
-		pthread_mutex_destroy(&law->forks[j].mutex);
-	free(law->philos);
-	free(law->forks);
+	law->philos[i - 1].l_fork = &law->forks[0];
+	return (0);
 }
 
 int	setup_philos(t_law *law)
@@ -63,24 +69,23 @@ int	setup_philos(t_law *law)
 	law->forks = ft_calloc(law->nb_philos, sizeof(t_fork));
 	if (!law->forks)
 		return (free(law->philos), 1);
+	if (pthread_mutex_init(&law->printf_mutex, NULL))
+		return (free(law->philos), free(law->forks), 1);
+	if (setup_philos2(law))
+		return (1);
+	return (0);
+}
+
+void	set_last_meal_time(t_law *law)
+{
+	int	i;
+
+	i = 0;
 	while (i < law->nb_philos)
 	{
-		law->philos[i].law = law;
-		law->philos[i].position = i + 1;
-		law->philos[i].state = THINK;
-		law->philos[i].meals_left = law->meals;
-		// law->forks[i].position = i;
-		if (pthread_mutex_init(&law->forks[i].mutex, NULL))
-			return (free_failed_setup(law, i, 0), 1);
-		if (pthread_mutex_init(&law->philos[i].termination_mutex, NULL))
-			return (free_failed_setup(law, i, 1), 1);
-		law->philos[i].r_fork = &law->forks[i];
-		if (i >= 1)
-			law->philos[i - 1].l_fork = &law->forks[i];
+		law->philos[i].last_meal = law->begin;
 		i++;
 	}
-	law->philos[i - 1].l_fork = &law->forks[0];
-	return (0);
 }
 
 int	setoff_philos(t_law *law)
@@ -103,7 +108,8 @@ int	setoff_philos(t_law *law)
 	// i = 0;
 	// while (i < law->nb_philos)
 	// {
-	// 	printf("philo nb %i: r_fork: %i, l_fork: %i\n", law->philos[i].position, law->philos[i].r_fork->position, law->philos[i].l_fork->position);
+	// 	printf("philo nb %i: r_fork: %i, l_fork: %i\n", law->philos[i].position,
+	// law->philos[i].r_fork->position, law->philos[i].l_fork->position);
 	// 	i++;
 	// }
 // }
