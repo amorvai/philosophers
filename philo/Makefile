@@ -6,7 +6,7 @@
 #    By: amorvai <amorvai@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/25 14:35:11 by amorvai           #+#    #+#              #
-#    Updated: 2022/12/28 23:09:21 by amorvai          ###   ########.fr        #
+#    Updated: 2022/12/30 21:43:23 by amorvai          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,9 +19,9 @@ OBJ_DIR	:= obj/
 SRC		:=	main.c \
 			philo.c \
 			set_up.c \
-			state.c \
 			boss.c \
-			util.c \
+			state.c \
+			util.c
 
 OBJ		:= $(addprefix $(OBJ_DIR), $(patsubst %.c, %.o, $(SRC)))
 

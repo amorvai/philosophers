@@ -6,7 +6,7 @@
 /*   By: amorvai <amorvai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/25 20:21:47 by amorvai           #+#    #+#             */
-/*   Updated: 2022/12/28 23:01:20 by amorvai          ###   ########.fr       */
+/*   Updated: 2022/12/30 22:21:41 by amorvai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,11 @@ void	*routine(void *random_philo)
 		p = 0;
 	else
 		p = 1;
+	if (philo->position == p)
+		print_timestamp(philo, philo->law->begin, philo->position, THINK);
 	if (philo->meals_left && philo->position % 2 == 0)
 	{
+		print_timestamp(philo, philo->law->begin, philo->position, THINK);
 		if (think(philo, philo->law->time_eat))
 			return (NULL);
 		if (p)
@@ -39,18 +42,21 @@ static int	start_feeding_loop(t_philosopher *philo, int p)
 {
 	while (philo->meals_left != 0)
 	{
-		if (philo->position == p && think(philo, philo->law->time_eat))
+		// pthread_mutex_lock(&philo->law->printf_mutex);
+		// printf("%i\t\t\t%i HAS A P-VALUE OF: %i\n",gettimestamp(philo->law->begin), philo->position, p);
+		// pthread_mutex_unlock(&philo->law->printf_mutex);
+		if (philo->position == p && p++ && think(philo, philo->law->time_eat))
 			return (1);
-		if (eat(philo) || check_death_row(philo))
+		if (eat(philo))
 			return (1);
-		if (philo_sleep(philo) || check_death_row(philo))
+		if (philo_sleep(philo))
 			return (1);
 		if (philo->law->time_eat > philo->law->time_sleep
 			&& think(philo, philo->law->time_eat - philo->law->time_sleep))
 			return (1);
-		if (p && p % 2 == 1 && p > philo->law->nb_philos)
+		if (p && p % 2 == 1 && p >= philo->law->nb_philos)
 			p = 1;
-		else if (p && p % 2 == 0 && p > philo->law->nb_philos)
+		else if (p && p % 2 == 0 && p >= philo->law->nb_philos)
 			p = 2;
 		else if (p)
 			p += 2;

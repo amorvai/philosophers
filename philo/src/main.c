@@ -6,7 +6,7 @@
 /*   By: amorvai <amorvai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 18:04:31 by amorvai           #+#    #+#             */
-/*   Updated: 2022/12/29 00:31:42 by amorvai          ###   ########.fr       */
+/*   Updated: 2022/12/29 22:03:14 by amorvai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	main(int argc, char **argv)
 	{
 		print_timestamp(&law.philos[0], law.begin, 1, GRAB);
 		ft_usleep(law.time_die);
+		law.philos[0].state = DEAD;
 		print_timestamp(&law.philos[0], law.begin, 1, DEAD);
 		return (free_setup(&law, law.nb_philos, 0), 1);
 	}

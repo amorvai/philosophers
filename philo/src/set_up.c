@@ -6,7 +6,7 @@
 /*   By: amorvai <amorvai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 15:30:32 by amorvai           #+#    #+#             */
-/*   Updated: 2022/12/28 23:09:42 by amorvai          ###   ########.fr       */
+/*   Updated: 2022/12/30 18:42:56 by amorvai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	get_law(int argc, char **argv, t_law *law)
 {
-	if (ft_atoi(argv[1], &law->nb_philos) || law->nb_philos < 0)
+	if (ft_atoi(argv[1], &law->nb_philos) || law->nb_philos <= 0)
 		return (1);
 	if (ft_atoi(argv[2], &law->time_die) || law->time_die < 0)
 		return (1);
