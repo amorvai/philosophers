@@ -6,23 +6,21 @@
 #    By: amorvai <amorvai@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/25 14:35:11 by amorvai           #+#    #+#              #
-#    Updated: 2022/12/31 05:03:31 by amorvai          ###   ########.fr        #
+#    Updated: 2022/12/31 05:14:00 by amorvai          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME	:= philo
+NAME	:= philo_bonus
 CC		:= cc
 CFLAGS	:= -I src/ -I lib/ -Wall -Wextra -Werror
 VPATH	:= src/
 OBJ_DIR	:= obj/
 
-SRC		:=	boss.c \
-			main.c \
+SRC		:=	main.c \
 			philo_factory.c \
 			philo_states.c \
 			philo_utils.c \
 			philo.c \
-			set_table.c \
 			utils.c
 
 OBJ		:= $(addprefix $(OBJ_DIR), $(patsubst %.c, %.o, $(SRC)))

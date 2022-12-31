@@ -1,8 +1,0 @@
-{
-	"files.associations": {
-		"__node_handle": "c",
-		"string": "c",
-		"unordered_map": "c",
-		"vector": "c"
-	}
-}
