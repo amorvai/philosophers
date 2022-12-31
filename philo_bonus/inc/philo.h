@@ -6,7 +6,7 @@
 /*   By: amorvai <amorvai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 19:07:18 by amorvai           #+#    #+#             */
-/*   Updated: 2022/12/31 05:04:54 by amorvai          ###   ########.fr       */
+/*   Updated: 2022/12/31 05:33:42 by amorvai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <sys/time.h>
 # include <pthread.h>
 # include <semaphore.h>
+# include <fcntl.h>
+# include <sys/wait.h>
 
 enum e_state {
 	DEAD,
