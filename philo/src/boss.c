@@ -6,7 +6,7 @@
 /*   By: amorvai <amorvai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/26 23:27:13 by amorvai           #+#    #+#             */
-/*   Updated: 2022/12/30 22:37:54 by amorvai          ###   ########.fr       */
+/*   Updated: 2022/12/31 01:03:16 by amorvai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	is_dead(t_law *law)
 	while (i < law->nb_philos)
 	{
 		pthread_mutex_lock(&law->philos[i].termination_mutex);
-		if (law->philos[i].die_now_bitch == 1)
+		if (law->philos[i].die_now == 1)
 		{
 			pthread_mutex_unlock(&law->philos[i].termination_mutex);
 			return (1);
@@ -39,13 +39,13 @@ static void	kill_all(t_law *law)
 	while (i < law->nb_philos)
 	{
 		pthread_mutex_lock(&law->philos[i].termination_mutex);
-		law->philos[i].die_now_bitch = 1;
+		law->philos[i].die_now = 1;
 		pthread_mutex_unlock(&law->philos[i].termination_mutex);
 		i++;
 	}
 }
 
-int	is_anyone_hungry(t_law *law)
+static int	is_anyone_hungry(t_law *law)
 {
 	int	i;
 

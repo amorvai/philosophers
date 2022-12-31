@@ -1,38 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set_up.c                                           :+:      :+:    :+:   */
+/*   philo_factory.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amorvai <amorvai@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/16 15:30:32 by amorvai           #+#    #+#             */
-/*   Updated: 2022/12/30 18:42:56 by amorvai          ###   ########.fr       */
+/*   Updated: 2022/12/31 01:05:30 by amorvai          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philo.h"
 
-int	get_law(int argc, char **argv, t_law *law)
-{
-	if (ft_atoi(argv[1], &law->nb_philos) || law->nb_philos <= 0)
-		return (1);
-	if (ft_atoi(argv[2], &law->time_die) || law->time_die < 0)
-		return (1);
-	if (ft_atoi(argv[3], &law->time_eat) || law->time_eat < 0)
-		return (1);
-	if (ft_atoi(argv[4], &law->time_sleep) || law->time_sleep < 0)
-		return (1);
-	if (argc == 6)
-	{
-		if (ft_atoi(argv[5], &law->meals) || law->meals < 0)
-			return (1);
-	}
-	else
-		law->meals = -1;
-	return (0);
-}
-
-static int	setup_philos2(t_law *law)
+static int	set_up_philos2(t_law *law)
 {
 	int	i;
 
@@ -58,7 +38,7 @@ static int	setup_philos2(t_law *law)
 	return (0);
 }
 
-int	setup_philos(t_law *law)
+int	set_up_philos(t_law *law)
 {
 	law->philos = ft_calloc(law->nb_philos, sizeof(t_philosopher));
 	if (!law->philos)
@@ -68,7 +48,7 @@ int	setup_philos(t_law *law)
 		return (free(law->philos), 1);
 	if (pthread_mutex_init(&law->printf_mutex, NULL))
 		return (free(law->philos), free(law->forks), 1);
-	if (setup_philos2(law))
+	if (set_up_philos2(law))
 		return (1);
 	return (0);
 }
@@ -85,18 +65,40 @@ void	set_last_meal_time(t_law *law)
 	}
 }
 
-int	setoff_philos(t_law *law)
+int	set_off_philos(t_law *law)
 {
 	int	i;
 
 	i = 0;
 	while (i < law->nb_philos)
 	{
-		pthread_create(&law->philos[i].thread, NULL, routine, &law->philos[i]);
-		usleep(1);
+		if (pthread_create(&law->philos[i].thread,
+				NULL, routine, &law->philos[i]))
+			return (1);
 		i++;
 	}
 	return (0);
+}
+
+void	free_setup(t_law *law, int i, int y)
+{
+	int	j;
+
+	j = 0;
+	pthread_mutex_destroy(&law->printf_mutex);
+	while (j < i)
+	{
+		pthread_mutex_destroy(&law->forks[j].mutex);
+		pthread_mutex_destroy(&law->philos[j].meals_mutex);
+		pthread_mutex_destroy(&law->philos[j].termination_mutex);
+		j++;
+	}
+	if (y >= 1)
+		pthread_mutex_destroy(&law->forks[j].mutex);
+	if (y == 2)
+		pthread_mutex_destroy(&law->philos[j].meals_mutex);
+	free(law->philos);
+	free(law->forks);
 }
 
 // void	print_philo(t_law *law)

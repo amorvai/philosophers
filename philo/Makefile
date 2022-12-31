@@ -6,7 +6,7 @@
 #    By: amorvai <amorvai@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/25 14:35:11 by amorvai           #+#    #+#              #
-#    Updated: 2022/12/30 21:43:23 by amorvai          ###   ########.fr        #
+#    Updated: 2022/12/31 00:46:50 by amorvai          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,12 +16,14 @@ CFLAGS	:= -I src/ -I lib/ -Wall -Wextra #-Werror
 VPATH	:= src/
 OBJ_DIR	:= obj/
 
-SRC		:=	main.c \
+SRC		:=	boss.c \
+			main.c \
+			philo_factory.c \
+			philo_states.c \
+			philo_utils.c \
 			philo.c \
-			set_up.c \
-			boss.c \
-			state.c \
-			util.c
+			set_table.c \
+			utils.c
 
 OBJ		:= $(addprefix $(OBJ_DIR), $(patsubst %.c, %.o, $(SRC)))
 
